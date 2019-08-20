@@ -1,0 +1,14 @@
+version: '3'
+services:
+  clippy:
+    build: .
+    ports:
+    - "3000:3000"
+    volumes:
+    - .:/code
+    links:
+    - elasticsearch
+  elasticsearch:
+    image: elastic/elasticsearch:7.3.0
+    environment:
+      - discovery.type=single-node
