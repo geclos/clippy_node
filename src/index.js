@@ -1,20 +1,15 @@
-const client = require('./lib/elastic')
+const clip = require('./clip')
 const express = require('express')
+const query = require('./query')
+
+const PORT = 3000
 const app = express()
-const port = 3000
 
-app.get('/', async (req, res) => {
-  try {
-    const { body } = await client.search({
-      index: 'random-index',
-      body: { foo: 'bar' }
-    })
+// middlewares
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-    res.send(body)
-  } catch (e) {
-    console.log(e)
-    res.send('Error!')
-  }
-})
+app.get('/query', query)
+app.post('/clip', clip)
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(PORT, () => console.log(`Listening on port ${PORT}!`))
